@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin") // Todas las rutas en este controlador comenzarán con /admin
@@ -68,6 +67,29 @@ public class AdminProductoController {
             System.err.println("Error al guardar producto: " + e.getMessage());
             response.put("success", false);
             response.put("message", "Error interno al guardar el producto.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/productos/eliminar/{id}")
+    @ResponseBody // Indica que el método devuelve directamente el cuerpo de la respuesta (JSON)
+    public ResponseEntity<Map<String, Object>> eliminarProducto(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<Producto> productoOptional = productoService.findProductoById(id);
+            if (productoOptional.isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Producto no encontrado.");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+            productoService.deleteProducto(id);
+            response.put("success", true);
+            response.put("message", "Producto eliminado exitosamente.");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println("Error al eliminar producto: " + e.getMessage());
+            response.put("success", false);
+            response.put("message", "Error interno al eliminar el producto.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
