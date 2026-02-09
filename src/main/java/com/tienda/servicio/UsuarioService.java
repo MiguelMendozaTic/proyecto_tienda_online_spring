@@ -1,4 +1,3 @@
-// Paquete donde se ubicarán tus servicios
 package com.tienda.servicio;
 
 import com.tienda.modelo.Usuario;
@@ -35,4 +34,13 @@ public interface UsuarioService {
      * @param id El ID del usuario a eliminar.
      */
     void deleteUsuario(Long id); // NUEVO MÉTODO
+
+    /**
+     * Cambia la contraseña de un usuario dado su correo.
+     * 
+     * @param correo El correo del usuario.
+     * @param nuevaContrasena La nueva contraseña.
+     * @return true si se cambió exitosamente, false si el usuario no existe.
+     */
+    boolean cambiarContrasena(String correo, String nuevaContrasena);
 }

@@ -135,4 +135,18 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.deleteById(Objects.requireNonNull(id));
     }
 
+    /**
+     * Cambia la contraseña de un usuario dado su correo.
+     */
+    @Override
+    public boolean cambiarContrasena(String correo, String nuevaContrasena) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByCorreo(correo);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            usuario.setContrasena(passwordEncoder.encode(nuevaContrasena));
+            usuarioRepository.save(usuario);
+            return true;
+        }
+        return false;
+    }
 }
