@@ -1,41 +1,4 @@
-pipeline {
-    agent any
-    
-    tools {
-        maven 'Maven3.9.12'
-    }
-    
-    stages {
-        stage('Checkout') {
-            steps {
-                echo 'Obteniendo código desde GitHub...'
-                checkout scm
-            }
-        }
-        
-        stage('Compile') {
-            steps {
-                echo 'Compilando el proyecto...'
-                sh 'mvn clean compile -B -ntp'
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                echo 'Ejecutando pruebas...'
-                sh 'mvn test -B -ntp'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        
-        stage('Package') {
-
-cat Jenkinsfile
-# Crear el archivo Jenkinsfile
+// Crear el archivo Jenkinsfile
 cat > Jenkinsfile << 'EOF'
 pipeline {
     agent any
@@ -85,10 +48,11 @@ pipeline {
             cleanWs()
         }
         success {
-            echo ' Pipeline completado con éxito'
+            echo 'Pipeline completado con éxito'
         }
         failure {
-            echo ' Pipeline falló'
+            echo 'Pipeline falló'
         }
     }
 }
+EOF
