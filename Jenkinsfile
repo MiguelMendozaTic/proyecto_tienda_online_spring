@@ -1,4 +1,4 @@
-# Crear el archivo Jenkinsfile
+// Crear el archivo Jenkinsfile
 cat > Jenkinsfile << 'EOF'
 pipeline {
     agent any
