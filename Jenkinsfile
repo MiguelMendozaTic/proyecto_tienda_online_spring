@@ -80,9 +80,9 @@ pipeline {
             // Mostrar resumen
             script {
                 if (fileExists('target/surefire-reports')) {
-                    echo '📊 Reportes de pruebas publicados'
+                    echo 'Reportes de pruebas publicados'
                 } else {
-                    echo '📭 No hay reportes de pruebas para publicar'
+                    echo 'No hay reportes de pruebas para publicar'
                 }
             }
         }
