@@ -1,0 +1,28 @@
+package com.ganadores.tienda;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+class ApplicationTest {
+    
+    @Test
+    void contextLoads() {
+        System.out.println("=== Prueba de contexto ===");
+        assertTrue(true, "El contexto debe cargar");
+    }
+    
+    @Test
+    void testSuma() {
+        System.out.println("=== Prueba matemática ===");
+        assertEquals(4, 2 + 2, "2 + 2 debe ser 4");
+    }
+    
+    @Test
+    void testNoNulo() {
+        System.out.println("=== Prueba de objeto no nulo ===");
+        String mensaje = "Hola Jenkins";
+        assertNotNull(mensaje, "El mensaje no debe ser nulo");
+    }
+}

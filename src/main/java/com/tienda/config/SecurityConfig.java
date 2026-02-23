@@ -1,4 +1,3 @@
-// Paquete donde se ubicarán tus configuraciones
 package com.tienda.config;
 
 import com.tienda.modelo.Usuario;
@@ -44,8 +43,9 @@ public class SecurityConfig {
      * CRÍTICO: Vincula UserDetailsService + PasswordEncoder
      */
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(UserDetailsService uds) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(uds); // usar ctor con UDS
+    public DaoAuthenticationProvider authenticationProvider() {  // SIN PARÁMETROS
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());    // Establecer después
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
@@ -60,7 +60,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authenticationProvider(authenticationProvider(userDetailsService()))
+                .authenticationProvider(authenticationProvider())  // AHORA LLAMA SIN PARÁMETROS
                 .authorizeHttpRequests(authorize -> authorize
                         // Rutas públicas accesibles por cualquiera
                         .requestMatchers("/", "/login", "/registro", "/productos-publicos", "/nosotros", "/verificar-correo", "/cambiar-contrasena", "/images/**", "/css/**", "/js/**").permitAll()
