@@ -156,9 +156,93 @@
             <a href="/carrito" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-lg transition flex items-center justify-center">
                 <i class="fas fa-arrow-left mr-2"></i> Volver al Carrito
             </a>
-            <button onclick="procederAlPago()" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-8 rounded-lg transition flex items-center justify-center">
+            <button onclick="mostrarModalPago()" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-8 rounded-lg transition flex items-center justify-center">
                 <i class="fas fa-credit-card mr-2"></i> Proceder al Pago
             </button>
+        </div>
+
+        <!-- Modal de Selección de Método de Pago -->
+        <div id="modalPago" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-screen overflow-y-auto mx-4">
+                <!-- Encabezado del Modal -->
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+                        <i class="fas fa-wallet text-orange-600 mr-3"></i> Selecciona tu Método de Pago
+                    </h2>
+                    <button onclick="cerrarModalPago()" class="text-gray-600 hover:text-gray-800 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Información de la Orden en el Modal -->
+                <div class="bg-orange-50 border-l-4 border-orange-600 p-4 mb-6 rounded">
+                    <p class="text-gray-700 font-medium">
+                        <span class="text-orange-600 font-bold">Número de Orden:</span> <span th:text="${orden.numeroOrden}">ORD-XXXX</span>
+                    </p>
+                    <p class="text-gray-700 font-medium">
+                        <span class="text-orange-600 font-bold">Total a Pagar:</span> <span class="text-orange-600 text-lg font-bold" th:text="'S/ ' + ${#numbers.formatDecimal(orden.total, 1, 'COMMA', 2, 'POINT')}">S/ 0.00</span>
+                    </p>
+                </div>
+
+                <!-- Formulario de Selección de Método -->
+                <form id="formMetodoPago" method="GET" action="/pago">
+                    <!-- Campo oculto para el número de orden -->
+                    <input type="hidden" name="numeroOrden" th:value="${orden.numeroOrden}">
+                    
+                    <!-- Métodos de Pago -->
+                    <h3 class="text-xl font-semibold text-gray-700 mt-8 mb-4">
+                        <i class="fas fa-credit-card mr-2"></i> Método de Pago
+                    </h3>
+                    <div class="space-y-3">
+                        <!-- Yape -->
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-purple-50 transition duration-200 border-2 border-gray-200 hover:border-purple-600">
+                            <input type="radio" name="metodoPago" value="yape" class="form-radio h-5 w-5 text-purple-600" checked>
+                            <div class="ml-3">
+                                <span class="text-gray-800 font-medium block">Yape</span>
+                                <span class="text-gray-600 text-sm">Transferencia rápida a través de Yape</span>
+                            </div>
+                            <img src="https://images.seeklogo.com/logo-png/38/1/yape-logo-png_seeklogo-381640.png" alt="Yape" class="h-8 ml-auto object-contain">
+                        </label>
+
+                        <!-- Plin -->
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-200 border-2 border-gray-200 hover:border-blue-600">
+                            <input type="radio" name="metodoPago" value="plin" class="form-radio h-5 w-5 text-blue-600">
+                            <div class="ml-3">
+                                <span class="text-gray-800 font-medium block">Plin</span>
+                                <span class="text-gray-600 text-sm">Pago mediante la plataforma Plin</span>
+                            </div>
+                            <img src="https://tse4.mm.bing.net/th/id/OIP.Wpbss6VhwGRy_X2G6GstRAHaHa?r=0&w=600&h=600&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Plin" class="h-8 ml-auto object-contain">
+                        </label>
+
+                        <!-- PayPal -->
+                        <label class="flex items-center bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-indigo-50 transition duration-200 border-2 border-gray-200 hover:border-indigo-600">
+                            <input type="radio" name="metodoPago" value="paypal" class="form-radio h-5 w-5 text-indigo-600">
+                            <div class="ml-3">
+                                <span class="text-gray-800 font-medium block">PayPal</span>
+                                <span class="text-gray-600 text-sm">Pago seguro a través de PayPal</span>
+                            </div>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1280px-PayPal.svg.png" alt="PayPal" class="h-8 ml-auto object-contain">
+                        </label>
+                    </div>
+
+                    <!-- Información de Seguridad -->
+                    <div class="bg-green-50 border-l-4 border-green-600 p-4 mt-6 rounded">
+                        <p class="text-green-800 font-medium">
+                            <i class="fas fa-shield-alt mr-2"></i> Tus datos de pago son seguros y encriptados
+                        </p>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-end mt-8">
+                        <button type="button" onclick="cerrarModalPago()" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-8 rounded-lg transition">
+                            <i class="fas fa-times mr-2"></i> Cancelar
+                        </button>
+                        <button type="submit" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-8 rounded-lg transition flex items-center justify-center">
+                            <i class="fas fa-arrow-right mr-2"></i> Continuar al Pago
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- Información Adicional -->
@@ -180,14 +264,36 @@
     </main>
 
     <script>
-        function procederAlPago() {
-            const ordenId = document.querySelector('[th\\:text="${orden.numeroOrden}"]');
-            const numeroOrden = document.querySelector('[th\\:text="${orden.numeroOrden}"]').textContent;
-            console.log('Procediendo al pago para orden:', numeroOrden);
-            
-            // Redirigir a la página de pago con el número de orden
-            window.location.href = '/pago?numeroOrden=' + numeroOrden;
+        function mostrarModalPago() {
+            const modal = document.getElementById('modalPago');
+            modal.classList.remove('hidden');
+            // Evitar scroll en el body cuando el modal está abierto
+            document.body.style.overflow = 'hidden';
         }
+
+        function cerrarModalPago() {
+            const modal = document.getElementById('modalPago');
+            modal.classList.add('hidden');
+            // Restaurar scroll en el body
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cerrar modal si se hace click fuera del contenido
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('modalPago');
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    cerrarModalPago();
+                }
+            });
+
+            // Enviar formulario cuando se hace submit
+            const formulario = document.getElementById('formMetodoPago');
+            formulario.addEventListener('submit', function(event) {
+                // El formulario se envía automáticamente con el método GET
+                // No necesitamos redireccionamiento manual
+            });
+        });
     </script>
 
 </body>
