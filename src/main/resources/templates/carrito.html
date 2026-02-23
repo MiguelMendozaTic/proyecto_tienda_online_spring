@@ -30,6 +30,7 @@
             <a href="/bienvenida" class="text-gray-700 hover:text-orange-600 font-medium">Inicio</a>
             <a href="/nosotros" class="text-gray-700 hover:text-orange-600 font-medium">Nosotros</a>
             <a href="/productos" class="text-gray-700 hover:text-orange-600 font-medium">Productos</a>
+            <a href="/mis-ordenes" class="text-gray-700 hover:text-orange-600 font-medium">Mis Órdenes</a>
             <a href="/logout" class="text-red-600 hover:text-red-800 font-medium">Cerrar Sesión</a>
             <a href="/carrito" class="relative">
                 <i class="fas fa-shopping-cart text-xl text-orange-600 border-b-2 border-orange-600"></i>
@@ -168,9 +169,9 @@
                     </label>
                 </div>
 
-                <button onclick="proceedToCheckout()"
+                <button onclick="crearOrden()"
                     class="mt-8 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-xl w-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                    <i class="fas fa-money-bill-wave mr-2"></i> Ir a Pagar
+                    <i class="fas fa-clipboard-check mr-2"></i> Crear Orden
                 </button>
             </div>
 
@@ -430,6 +431,33 @@
             }
 
             showConfirmDeleteModal();
+        }
+
+        async function crearOrden() {
+            try {
+                console.log('Creando orden...');
+                const response = await fetch('/orden/crear', {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Orden creada exitosamente:', data);
+                    
+                    showMessageModal('¡Orden creada exitosamente! Número de orden: ' + data.numeroOrden, true);
+                    
+                    // Redirigir a la página de confirmación de orden después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = data.redirectUrl;
+                    }, 2000);
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    showMessageModal(errorData.message || 'Error al crear la orden.', false);
+                }
+            } catch (error) {
+                console.error('Error al crear orden:', error);
+                showMessageModal('Error de conexión: ' + error.message, false);
+            }
         }
 
         function proceedToCheckout() {
