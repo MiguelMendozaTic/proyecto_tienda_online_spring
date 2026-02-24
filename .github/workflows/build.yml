@@ -51,7 +51,7 @@ jobs:
           fi
           mvn verify sonar:sonar \
             -Dsonar.projectKey=MiguelMendozaTic_proyecto_tienda_online_spring \
-            -Dsonar.organization=dmiguelmendozatic \
+            -Dsonar.organization=miguelmendozatic \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
     - name: Empaquetar aplicación
