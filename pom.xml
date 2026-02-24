@@ -14,7 +14,7 @@
     <groupId>com.ganadores</groupId>
     <artifactId>proyecto</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ProyectoTienda</name>   <!-- Punto 4 -->
+    <name>Tienda</name>  
     <description>Proyecto tienda Spring Boot</description>-->
     
     <properties>
