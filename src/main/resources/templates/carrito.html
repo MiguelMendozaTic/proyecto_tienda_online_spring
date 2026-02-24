@@ -461,8 +461,15 @@
         }
 
         function proceedToCheckout() {
-            const selectedMethod = document.querySelector('input[name="metodoPago"]:checked').value;
-            window.location.href = '/pago?metodo=' + selectedMethod;
+            const selectedMethod = document.querySelector('input[name="metodoPago"]:checked');
+            
+            if (!selectedMethod) {
+                showMessageModal('Por favor, selecciona un método de pago antes de continuar.', false);
+                return;
+            }
+            
+            const metodoPago = selectedMethod.value;
+            window.location.href = '/pago?metodo=' + metodoPago;
         }
 
         async function vaciarCarritoCompleto() {
