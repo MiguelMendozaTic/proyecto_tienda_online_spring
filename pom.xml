@@ -11,11 +11,11 @@
         <relativePath/>
     </parent>
     
-    <groupId>com.ganadores</groupId>
+   <!-- <groupId>com.ganadores</groupId>
     <artifactId>proyecto</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>tienda</name>
-    <description>Proyecto tienda Spring Boot</description>
+    <description>Proyecto tienda Spring Boot</description>-->
     
     <properties>
         <java.version>21</java.version>
