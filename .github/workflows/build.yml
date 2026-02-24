@@ -36,6 +36,14 @@ jobs:
     # PUNTO 4: Análisis de calidad con SonarCloud
     - name: Analizar con SonarCloud
       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn verify sonar:sonar
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          mvn verify sonar:sonar \
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
+            -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} \
+            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}
+        else
+          mvn verify sonar:sonar
+        fi
