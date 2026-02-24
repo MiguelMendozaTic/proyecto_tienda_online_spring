@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout del código
       uses: actions/checkout@v4
+      with: #Punto 4
+        fetch-depth: 0  # Punto 4
 
     - name: Configurar JDK 21 # Cambia a 11 o 21 si usas otra versión
       uses: actions/setup-java@v4
@@ -22,8 +24,7 @@ jobs:
         cache: maven
 
     - name: Compilar con Maven
-      run: mvn clean compile #run: mvn -B package --file pom.xml
-    # Paso adicional: Verificar que la compilación fue exitosa
+      run: mvn clean compile 
     - name: Verificar compilación
       run: |
           if [ -d "target" ]; then
@@ -49,11 +50,21 @@ jobs:
             echo "Ve a Settings > Secrets and variables > Actions y crea SONAR_TOKEN"
             exit 1
           fi
+
+          # Verificar que el token existe, aumentar todo punto 4
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "ERROR: SONAR_TOKEN no está configurado"
+            echo "Ve a Settings > Secrets and variables > Actions y crea SONAR_TOKEN"
+            exit 1
+          fi
+          
           mvn verify sonar:sonar \
             -Dsonar.projectKey=MiguelMendozaTic_proyecto_tienda_online_spring \
             -Dsonar.organization=miguelmendozatic \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            # punto 4
+            -Dsonar.sources=src/main/java,src/main/resources
     - name: Empaquetar aplicación
       run: mvn package -DskipTests
       
