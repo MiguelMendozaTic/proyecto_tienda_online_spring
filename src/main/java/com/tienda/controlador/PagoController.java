@@ -55,7 +55,7 @@ public class PagoController {
     @GetMapping("/pago")
     public String showPaymentPage(
             @RequestParam(value = "numeroOrden", required = false) String numeroOrden,
-            @RequestParam("metodo") String metodo, 
+            @RequestParam(value = "metodo", required = false) String metodo, 
             Model model, 
             HttpSession session, 
             RedirectAttributes redirectAttributes) {
@@ -63,6 +63,12 @@ public class PagoController {
 
         if (usuarioAutenticado == null) {
             return "redirect:/login"; // Redirigir al login si no está autenticado
+        }
+
+        // Validar que se haya enviado el método de pago
+        if (metodo == null || metodo.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Debes seleccionar un método de pago.");
+            return "redirect:/carrito";
         }
 
         // Si viene el número de orden, cargar la orden desde la base de datos
