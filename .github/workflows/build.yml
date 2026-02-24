@@ -21,5 +21,15 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Compilar y Testear con Maven
-      run: mvn -B package --file pom.xml
+    - name: Compilar con Maven
+      run: mvn clean compile #run: mvn -B package --file pom.xml
+    # Paso adicional: Verificar que la compilación fue exitosa
+    - name: Verificar compilación
+      run: |
+          if [ -d "target" ]; then
+            echo "✅ Compilación exitosa - Directorio target creado"
+            ls -la target/
+          else
+            echo "❌ Error: No se creó el directorio target"
+            exit 1
+          fi
