@@ -50,8 +50,10 @@ jobs:
             exit 1
           fi
           mvn verify sonar:sonar \
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.projectKey=desarrollodigitalperu \
+            -Dsonar.organization=DesarrolloDigitalPeru
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
     - name: Empaquetar aplicación
       run: mvn package -DskipTests
       
