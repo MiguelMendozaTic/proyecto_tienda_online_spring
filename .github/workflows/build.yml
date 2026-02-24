@@ -64,7 +64,10 @@ jobs:
             -Dsonar.organization=miguelmendozatic \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.sources=src/main/java,src/main/resources
+            -Dsonar.sources=src/main/java,src/main/resources \
+            -Dsonar.tests=src/test/java \
+            -Dsonar.exclusions=**/*.sql
+            
     - name: Empaquetar aplicación
       run: mvn package -DskipTests
       
