@@ -58,13 +58,13 @@ jobs:
             exit 1
           fi
           
+          # Punto 4
           mvn verify sonar:sonar \
-            mvn verify sonar:sonar \
-              -Dsonar.projectKey=MiguelMendozaTic_proyecto_tienda_online_spring \
-              -Dsonar.organization=miguelmendozatic \
-              -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
-              -Dsonar.sources=src/main/java,src/main/resources
+            -Dsonar.projectKey=MiguelMendozaTic_proyecto_tienda_online_spring \
+            -Dsonar.organization=miguelmendozatic \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.sources=src/main/java,src/main/resources
     - name: Empaquetar aplicación
       run: mvn package -DskipTests
       
