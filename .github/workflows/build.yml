@@ -33,3 +33,9 @@ jobs:
             echo "❌ Error: No se creó el directorio target"
             exit 1
           fi
+    # PUNTO 4: Análisis de calidad con SonarCloud
+    - name: Analizar con SonarCloud
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn verify sonar:sonar
