@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.11</version>  <!-- CORREGIDO: Versión LTS estable -->
+        <version>3.5.11</version>
         <relativePath/>
     </parent>
     
@@ -22,15 +22,19 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         
-        <!-- CORREGIDO: SonarCloud - sin espacios -->
+        <!-- SonarCloud properties -->
         <sonar.organization>miguelmendozatic</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>MiguelMendozaTic_proyecto_tienda_online_spring</sonar.projectKey>
         
-        <!-- Versiones centralizadas -->
+        <!-- Versiones centralizadas de dependencias clave -->
         <lombok.version>1.18.36</lombok.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <!-- Versiones de plugins -->
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
     </properties>
     
     <dependencies>
@@ -89,20 +93,15 @@
         </dependency>
         
         <!-- ========================================= -->
-        <!-- Seguridad y Thymeleaf                      -->
+        <!-- Thymeleaf extras (integración con Spring Security) -->
         <!-- ========================================= -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-crypto</artifactId>
-        </dependency>
-        
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
         
         <!-- ========================================= -->
-        <!-- Validación y configuración (NUEVAS)        -->
+        <!-- Validación y configuración                 -->
         <!-- ========================================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -131,20 +130,49 @@
         </dependency>
     </dependencies>
     
+    <!-- Gestión de dependencias para control centralizado -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Aquí puedes definir versiones específicas si necesitas 
+                 sobrescribir las del parent de Spring Boot -->
+        </dependencies>
+    </dependencyManagement>
+    
     <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Gestión centralizada de versiones de plugins -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        
         <plugins>
             <!-- Plugin de compilación -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -184,7 +212,6 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>4.0.0.4121</version>
             </plugin>
         </plugins>
     </build>
